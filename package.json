@@ -13,12 +13,9 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "codemirror": "^5.22.0",
     "js-beautify": "^1.6.8",
-    "uuid": "^3.0.1",
     "vue": "^2.1.0",
-    "vue-codemirror": "^2.1.6",
-    "vue-material": "^0.5.2"
+    "vue-codemirror": "^2.1.6"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
@@ -80,7 +77,6 @@
     "vue-loader": "^10.0.0",
     "vue-style-loader": "^1.0.0",
     "vue-template-compiler": "^2.1.0",
-    "vuetify": "^0.8.5",
     "webpack": "^1.13.2",
     "webpack-dashboard": "^0.2.0",
     "webpack-dev-middleware": "^1.8.3",
