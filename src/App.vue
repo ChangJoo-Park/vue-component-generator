@@ -1,6 +1,7 @@
 <template lang="pug">
   #app
     div.header
+      v-btn(flat) Hello
     //- Left (Generator)
     div.generator
       div.options
@@ -81,12 +82,10 @@
             | destroyed
         div.form-group
           button  Reset
-          button(v-on:click="saveComponent")  Confirm
+          button()  Confirm
     //- Right (Result)
     div.result
-      pre {{options}}
-      pre {{newComponent}}
-      pre {{compiledComponents}}
+      textarea(class="code-mirror")
 </template>
 
 <script>
@@ -134,9 +133,16 @@
 //
 //   return result
 // }
+import Beautify from 'js-beautify'
+import CodeMirror from 'codemirror'
 
+let codemirror
 export default {
   name: 'app',
+  mounted () {
+    this.$vuetify.init()
+    console.log(CodeMirror.autoFormatRange)
+  },
   data: function () {
     return {
       options: {
@@ -157,8 +163,7 @@ export default {
         selectedStyle: 'css',
         selectedScript: 'javascript',
         selectedScoped: false
-      },
-      components: []
+      }
     }
   },
   methods: {
@@ -191,60 +196,70 @@ export default {
     },
     removeMethod (index) {
       this.newComponent.props.splice(index, 1)
-    },
-    saveComponent () {
-      var component = JSON.parse(JSON.stringify(this.newComponent))
-      this.components.push(component)
+    }
+  },
+  watch: {
+    compiledComponent: {
+      handler (newVal, oldVal) {
+        var dom = document.querySelector('.code-mirror')
+        if (!codemirror) {
+          codemirror = CodeMirror.fromTextArea(dom, {
+            lineNumbers: true,
+            mode: 'javascript'
+          })
+        }
+        const result = Beautify(newVal, { indent_size: 2 })
+        codemirror.setValue(result)
+      },
+      deep: true
     }
   },
   computed: {
-    compiledComponents: function () {
-      return this.components.map((c) => {
-        const component = JSON.parse(JSON.stringify(c))
-        const templateLanguage = component.selectedTemplate === 'html' ? '' : ` lang='${component.selectedTemplate}'`
-        const styleLanguage = component.selectedStyle === 'css' ? '' : ` lang='${component.selectedStyle}'`
-        const styleScoped = component.selectedScoped ? ' scoped' : ''
-        const scriptLanguage = component.selectedScript === 'javascript' ? '' : ` lang='${component.selectedScript}'`
-        let scriptBody = 'export default {'
-        // Props
-        if (component.props && component.props.length > 0) {
-          let scriptProps = component.props.map(prop => `'${prop.name}',`).join(' ').slice(0, -1)
-          scriptBody += `props: [${scriptProps}],`
-        }
-        // Check Data
-        if (component.data && component.data.length > 0) {
-          let scriptData = component.data.map(data => data.name + ": '' ,").join(' ').slice(0, -1)
-          scriptBody += `data: function () {return {${scriptData}}},`
-        }
-        // LifeCycle Hooks
-        if (component.lifecycleHooks && component.lifecycleHooks.length > 0) {
-          scriptBody += component.lifecycleHooks.map(hook => `${hook}() {},`).join(' ')
-        }
-        // Watches
-        if (component.watches && component.watches.length > 0) {
-          let scriptWatches = component.watches.map(watch => `${watch.name} (newVal, oldVal){},`).join(' ')
-          scriptBody += `watch: { ${scriptWatches} },`
-        }
-        // Computed
-        if (component.computed && component.computed.length > 0) {
-          let scriptComputed = component.computed.map(computed => `${computed.name} () {},`).join(' ')
-          scriptBody += `computed: { ${scriptComputed} },`
-        }
-        // Methods
-        if (component.methods && component.methods.length > 0) {
-          let scriptMethods = component.methods.map(method => `${method.name} () {},`).join(' ')
-          scriptBody += `methods: { ${scriptMethods} },`
-        }
-        scriptBody = scriptBody.trim().slice(0, -1)
-        scriptBody += '}'
-        // console.log(templateLanguage, scriptLanguage, styleLanguage, styleScoped)
-        const compiledComponent = '<template' + templateLanguage + '><div>' + '</template>' +
-                                  '<script' + scriptLanguage + '>' +
-                                  scriptBody +
-                                  '</scri' + 'pt>' +
-                                  '<style' + styleLanguage + styleScoped + '>' + '</style>'
-        return compiledComponent
-      })
+    compiledComponent: function () {
+      const component = JSON.parse(JSON.stringify(this.newComponent))
+      const templateLanguage = component.selectedTemplate === 'html' ? '' : ` lang='${component.selectedTemplate}'`
+      const styleLanguage = component.selectedStyle === 'css' ? '' : ` lang='${component.selectedStyle}'`
+      const styleScoped = component.selectedScoped ? ' scoped' : ''
+      const scriptLanguage = component.selectedScript === 'javascript' ? '' : ` lang='${component.selectedScript}'`
+      let scriptBody = 'export default {'
+      scriptBody += 'name: ' + "'" + component.name + "',"
+      // Props
+      if (component.props && component.props.length > 0) {
+        let scriptProps = component.props.map(prop => `'${prop.name}'`).join(',')
+        scriptBody += `props: [${scriptProps}],`
+      }
+      // Check Data
+      if (component.data && component.data.length > 0) {
+        let scriptData = component.data.map(data => data.name + ": ''").join(',')
+        scriptBody += `data () {return {${scriptData}}},`
+      }
+      // LifeCycle Hooks
+      if (component.lifecycleHooks && component.lifecycleHooks.length > 0) {
+        scriptBody += component.lifecycleHooks.map(hook => `${hook}() {},`).join(' ')
+      }
+      // Watches
+      if (component.watches && component.watches.length > 0) {
+        let scriptWatches = component.watches.map(watch => `${watch.name} (newVal, oldVal){}`).join(',')
+        scriptBody += `watch: { ${scriptWatches} },`
+      }
+      // Computed
+      if (component.computed && component.computed.length > 0) {
+        let scriptComputed = component.computed.map(computed => `${computed.name} () {}`).join(',')
+        scriptBody += `computed: { ${scriptComputed} },`
+      }
+      // Methods
+      if (component.methods && component.methods.length > 0) {
+        let scriptMethods = component.methods.map(method => `${method.name} () {}`).join(',')
+        scriptBody += `methods: { ${scriptMethods} },`
+      }
+      scriptBody = scriptBody.trim().slice(0, -1)
+      scriptBody += '}'
+      // scriptBody = Beautify(scriptBody, { indent_size: 2 })
+      let templateResult = '<template' + templateLanguage + '>\n\t<div>\n\n\t</div>\n' + '</template>\n\n'
+      let scriptResult = '<script' + scriptLanguage + '>\n' + scriptBody + '\n</scri' + 'pt>\n\n'
+      let styleResult = '<style' + styleLanguage + styleScoped + '>\n\n' + '</style>'
+      const compiledComponent = templateResult + scriptResult + styleResult
+      return compiledComponent
     }
   }
 }
