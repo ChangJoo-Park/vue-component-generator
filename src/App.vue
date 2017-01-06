@@ -2,94 +2,89 @@
   #app
     div.header
     //- Left (Generator)
-    div.generator
-      div.options
-        div.form-group
-          label Template
-          select(v-model="newComponent.selectedTemplate")
-            option(v-for="option in options.template" v-bind:value="option") {{option}}
-        div.form-group
-          label Script
-          select(v-model="newComponent.selectedScript")
-            option(v-for="option in options.scripts" v-bind:value="option") {{option}}
-        div.form-group
-          label Style
-          select(v-model="newComponent.selectedStyle")
-            option(v-for="option in options.styles" v-bind:value="option") {{option}}
-        div.form-group
-          label Scoped Style
-            input(type="checkbox" v-model="newComponent.selectedScoped")
-      div.component-form
-        div.form-group
-          label Component Name
-          input(type="text", placeholder="file-name" v-model="newComponent.name")
-        div.form-group
-          button(v-on:click="addNewProp") Add Prop
-          div(v-for="(prop, index) in newComponent.props")
-            label Props {{prop}}
-              input(type="text", placeholder="props" v-model="prop.name")
-            button(v-on:click="removeProp(index)") Remove
-        div.form-group
-          button(v-on:click="addNewData") Add Data
-          div(v-for="(data, index) in newComponent.data")
-            label Data {{data}}
-              input(type="text", v-model="data.name")
-            button(v-on:click="removeData(index)") Remove
-        div.form-group
-          button(v-on:click="addNewWatch") Add Watch
-          div(v-for="(watch, index) in newComponent.watches")
-            label Watch {{watch}}
-              input(type="text", v-model="watch.name")
-            button(v-on:click="removeWatch(index)") Remove
-        div.form-group
-          button(v-on:click="addNewComputed") Add Computed
-          div(v-for="(computed, index) in newComponent.computed")
-            label Computed {{computed}}
-              input(type="text", v-model="computed.name")
-            button(v-on:click="removeComputed(index)") Remove
-        div.form-group
-          button(v-on:click="addNewMethod") Add Method
-          div(v-for="(method, index) in newComponent.methods")
-            label Method {{method}}
-              input(type="text", v-model="method.name")
-            button(v-on:click="removeMethod(index)") Remove
-        //- LifeCycle Hook
-        div.form-group LifeCycle Hooks
-          ul
-            li
-              label
-                input(type="checkbox" value="beforeCreate", v-model="newComponent.lifecycleHooks")
-                | beforeCreate
-            li
-              label
-                input(type="checkbox" value="created", v-model="newComponent.lifecycleHooks")
-                | created
-            li
-              label
-              input(type="checkbox" value="beforeMount", v-model="newComponent.lifecycleHooks")
-              | beforeMount
-            li
-              label
-                input(type="checkbox" value="mounted", v-model="newComponent.lifecycleHooks")
-                | mounted
-            li
-              label
-                input(type="checkbox" value="beforeUpdate", v-model="newComponent.lifecycleHooks")
-                | beforeUpdate
-            li
-              label
-                input(type="checkbox" value="updated", v-model="newComponent.lifecycleHooks")
-                | updated
-            li
-              label
-                input(type="checkbox" value="beforeDestroy", v-model="newComponent.lifecycleHooks")
-                | beforeDestroy
-            li
-              label
-                input(type="checkbox" value="destroyed", v-model="newComponent.lifecycleHooks")
-                | destroyed
-    //- Right (Result)
-    codemirror(v-bind:code="compiledComponent", v-bind:options="editorOption")
+    div.row
+      div.generator.col-md-6
+        h1 Vue Component Generator
+        div.options
+          div.card
+            label.label-header Template
+            select(v-model="newComponent.selectedTemplate")
+              option(v-for="option in options.template" v-bind:value="option") {{option}}
+          div.card
+            label.label-header Script
+            select(v-model="newComponent.selectedScript")
+              option(v-for="option in options.scripts" v-bind:value="option") {{option}}
+          div.card
+            label.label-header Style
+            select(v-model="newComponent.selectedStyle")
+              option(v-for="option in options.styles" v-bind:value="option") {{option}}
+          div.card
+            label.label-header Scoped Style
+              br
+              input(type="checkbox" v-model="newComponent.selectedScoped")
+              span.checkable on
+        div.component-form
+          div.card
+            label.label-header Component Name
+            input(type="text", v-model="newComponent.name")
+          div.card
+            button(v-on:click="addNewProp") Add Prop
+            div(v-for="(prop, index) in newComponent.props")
+              label.label-header Props
+                input(type="text", placeholder="props" v-model="prop.name")
+              button.pseudo(v-on:click="removeProp(index)") Remove
+          div.card
+            button(v-on:click="addNewData") Add Data
+            div(v-for="(data, index) in newComponent.data")
+              label.label-header Data
+                input(type="text", v-model="data.name")
+              button.pseudo(v-on:click="removeData(index)") Remove
+          div.card
+            button(v-on:click="addNewWatch") Add Watch
+            div(v-for="(watch, index) in newComponent.watches")
+              label.label-header Watch
+                input(type="text", v-model="watch.name")
+              button.pseudo(v-on:click="removeWatch(index)") Remove
+          div.card
+            button(v-on:click="addNewComputed") Add Computed
+            div(v-for="(computed, index) in newComponent.computed")
+              label.label-header Computed
+                input(type="text", v-model="computed.name")
+              button.pseudo(v-on:click="removeComputed(index)") Remove
+          div.card
+            button(v-on:click="addNewMethod") Add Method
+            div(v-for="(method, index) in newComponent.methods")
+              label.label-header Method
+                input(type="text", v-model="method.name")
+              button.pseudo(v-on:click="removeMethod(index)") Remove
+          //- LifeCycle Hook
+          div.card LifeCycle Hooks
+                label.label-header
+                  input(type="checkbox" value="beforeCreate", v-model="newComponent.lifecycleHooks")
+                  span.checkable beforeCreate
+                label.label-header
+                  input(type="checkbox" value="created", v-model="newComponent.lifecycleHooks")
+                  span.checkable created
+                label.label-header
+                  input(type="checkbox" value="beforeMount", v-model="newComponent.lifecycleHooks")
+                  span.checkable beforeMount
+                label.label-header
+                  input(type="checkbox" value="mounted", v-model="newComponent.lifecycleHooks")
+                  span.checkable mounted
+                label.label-header
+                  input(type="checkbox" value="beforeUpdate", v-model="newComponent.lifecycleHooks")
+                  span.checkable beforeUpdate
+                label.label-header
+                  input(type="checkbox" value="updated", v-model="newComponent.lifecycleHooks")
+                  span.checkable updated
+                label.label-header
+                  input(type="checkbox" value="beforeDestroy", v-model="newComponent.lifecycleHooks")
+                  span.checkable beforeDestroy
+                label.label-header
+                  input(type="checkbox" value="destroyed", v-model="newComponent.lifecycleHooks")
+                  span.checkable destroyed
+        //- Right (Result)
+      codemirror.col-md-6(v-bind:code="compiledComponent", v-bind:options="editorOption")
 </template>
 
 <script>
@@ -169,7 +164,7 @@ export default {
       editorOption: {
         tabSize: 2,
         mode: 'text/javascript',
-        theme: 'cobalt',
+        theme: 'solarized light',
         lineNumbers: true,
         line: true,
         keyMap: 'sublime',
@@ -193,25 +188,25 @@ export default {
       this.newComponent.data.push({name: ''})
     },
     removeData (index) {
-      this.newComponent.props.splice(index, 1)
+      this.newComponent.data.splice(index, 1)
     },
     addNewWatch () {
       this.newComponent.watches.push({name: ''})
     },
     removeWatch (index) {
-      this.newComponent.props.splice(index, 1)
+      this.newComponent.watches.splice(index, 1)
     },
     addNewComputed () {
       this.newComponent.computed.push({name: ''})
     },
     removeComputed (index) {
-      this.newComponent.props.splice(index, 1)
+      this.newComponent.computed.splice(index, 1)
     },
     addNewMethod () {
       this.newComponent.methods.push({name: ''})
     },
     removeMethod (index) {
-      this.newComponent.props.splice(index, 1)
+      this.newComponent.methods.splice(index, 1)
     }
   },
   watch: {
@@ -236,7 +231,8 @@ export default {
   computed: {
     compiledComponent: function () {
       const component = JSON.parse(JSON.stringify(this.newComponent))
-      const templateLanguage = component.selectedTemplate === 'html' ? '' : ` lang='${component.selectedTemplate}'`
+      const isHTML = component.selectedTemplate === 'html'
+      const templateLanguage = isHTML ? '' : ` lang='${component.selectedTemplate}'`
       const styleLanguage = component.selectedStyle === 'css' ? '' : ` lang='${component.selectedStyle}'`
       const styleScoped = component.selectedScoped ? ' scoped' : ''
       const scriptLanguage = component.selectedScript === 'javascript' ? '' : ` lang='${component.selectedScript}'`
@@ -285,10 +281,12 @@ export default {
         'indent_handlebars': true,
         'object': {}
       })
-      let templateResult = '<template' + templateLanguage + '>\n\t<div>\n\n\t</div>\n' + '</template>\n\n'
+      let dummyText = '<!-- This Component is generated by Vue Component Generator - ChangJoo Park. --> \n'
+      let templateBody = isHTML ? '\n\t<div>\n\n\t</div>\n' : '\n\tdiv\n'
+      let templateResult = '<template' + templateLanguage + '>' + templateBody + '</template>\n\n'
       let scriptResult = '<script' + scriptLanguage + '>\n' + scriptBody + '\n</scri' + 'pt>\n\n'
       let styleResult = '<style' + styleLanguage + styleScoped + '>\n\n' + '</style>'
-      const compiledComponent = templateResult + scriptResult + styleResult
+      const compiledComponent = dummyText + templateResult + scriptResult + styleResult
       return compiledComponent
     }
   }
@@ -296,7 +294,21 @@ export default {
 </script>
 
 <style>
+.generator {
+  padding: 30px;
+  padding-top: 10px;
+}
 .CodeMirror {
   font-family: 'Source Code Pro', 'Monaco','menlo', monospace !important;
+  width: 50% !important;
+  height: 100vh !important;
+}
+.card {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.label-header {
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 </style>
