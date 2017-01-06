@@ -2,23 +2,21 @@
   #app
     nav.header
       a.brand Vue Component Generator
+      div.menu
+        a.button.icon-puzzle(href="https://github.com/ChangJoo-Park/vue-component-generator", target="_blank") Github Repo
     div.flex.two
       codemirror.container(v-bind:code="compiledComponent", v-bind:options="editorOption")
       div.container
         div
           div
-            label.label-header Component Name
+            label.label-header Component Name (enforce kebab-case)
             input(type="text", v-model="newComponent.name")
           hr
-          div.flex.two
+          div.flex.one
             div
               label.label-header Template
               select(v-model="newComponent.selectedTemplate")
                 option(v-for="option in options.template" v-bind:value="option") {{option}}
-            div
-              label.label-header Script
-              select(v-model="newComponent.selectedScript")
-                option(v-for="option in options.scripts" v-bind:value="option") {{option}}
           div.flex.two
             div
               label.label-header Style
@@ -35,102 +33,104 @@
             div
               div.flex.two
                 h2 Props
+                  small
+                    a(href="https://vuejs.org/v2/guide/components.html#Prop-Validation", target="_blank")
+                      img.guide(src="https://vuejs.org/images/logo.png")
                 label.label-header.header
                   input(type="checkbox" value="selectedPropsValidation", v-model="newComponent.selectedPropsValidation")
-                  span.checkable Validation
+                  span.checkable.mini Validation
               button(v-on:click="addNewProp") Add
-              div(v-for="(prop, index) in newComponent.props" v-if="newComponent.selectedPropsValidation")
-                div.flex.two
-                  div
-                    label.label-header Name
-                      input(type="text", v-model="prop.name")
-                  div
-                    label.label-header Type
-                      select(v-model="prop.type")
-                        option(v-for="option in options.propsType" v-bind:value="option") {{option}}
-                      div.remove-button-wrapper
-                        button.error.button(v-on:click="removeProp(index)") Remove
-              div(v-for="(prop, index) in newComponent.props" v-else)
-                label.label-header Name
-                  input(type="text", v-model="prop.name")
-                div.remove-button-wrapper
-                  button.error.button(v-on:click="removeProp(index)") Remove
+              div(v-if="newComponent.selectedPropsValidation")
+                div(v-for="(prop, index) in newComponent.props")
+                  div.flex.two
+                    div
+                      label.label-header Name
+                        input(type="text", v-model="prop.name")
+                    div
+                      label.label-header Type
+                        select(v-model="prop.type")
+                          option(v-for="option in options.propsType" v-bind:value="option") {{option}}
+                  div.flex.two
+                    div
+                      label.label-header
+                        input(type="checkbox" value="prop.required", v-model="prop.required")
+                        span.checkable Required
+                    div.remove-button-wrapper
+                      button.error.button(v-on:click="removeProp(index)") Remove
+              div(v-else)
+                div(v-for="(prop, index) in newComponent.props")
+                  label.label-header Name
+                    input(type="text", v-model="prop.name")
+                  div.remove-button-wrapper
+                    button.error.button(v-on:click="removeProp(index)") Remove
             div
               h2 Data
+                small
+                  a(href="https://vuejs.org/v2/api/#Options-Data", target="_blank")
+                    img.guide(src="https://vuejs.org/images/logo.png")
               button(v-on:click="addNewData") Add
               div(v-for="(data, index) in newComponent.data")
-                label.label-header Data
+                label.label-header Name
                   input(type="text", v-model="data.name")
                 div.remove-button-wrapper
                   button.error.button(v-on:click="removeData(index)") Remove
           hr
           div.flex.two
             div
-              h2 Watch
-              button(v-on:click="addNewWatch") Add
-              div(v-for="(watch, index) in newComponent.watches")
-                label.label-header Watch
-                  input(type="text", v-model="watch.name")
-                div.remove-button-wrapper
-                  button.error.button(v-on:click="removeWatch(index)") Remove
-            div
               h2 Computed
+                small
+                  a(href="https://vuejs.org/v2/guide/computed.html#Computed-Properties", target="_blank")
+                    img.guide(src="https://vuejs.org/images/logo.png")
               button(v-on:click="addNewComputed") Add
               div(v-for="(computed, index) in newComponent.computed")
-                label.label-header Computed
+                label.label-header Name
                   input(type="text", v-model="computed.name")
                 div.remove-button-wrapper
                   button.error.button(v-on:click="removeComputed(index)") Remove
+            div
+              h2 Watch
+                small
+                  a(href="https://vuejs.org/v2/guide/computed.html#Watchers", target="_blank")
+                    img.guide(src="https://vuejs.org/images/logo.png")
+              button(v-on:click="addNewWatch") Add
+              div(v-for="(watch, index) in newComponent.watches")
+                label.label-header Name
+                  input(type="text", v-model="watch.name")
+                div.remove-button-wrapper
+                  button.error.button(v-on:click="removeWatch(index)") Remove
           hr
           div.flex.two
             div
               h2 Method
+                small
+                  a(href="https://vuejs.org/v2/api/#methods", target="_blank")
+                    img.guide(src="https://vuejs.org/images/logo.png")
               button(v-on:click="addNewMethod") Add
               div(v-for="(method, index) in newComponent.methods")
-                label.label-header Method
+                label.label-header Name
                   input(type="text", v-model="method.name")
                 div.remove-button-wrapper
                   button.error.button(v-on:click="removeMethod(index)") Remove
             div
               h2 Lifecycle Hooks
-              div
-                label.label-header
-                  input(type="checkbox" value="beforeCreate", v-model="newComponent.lifecycleHooks")
-                  span.checkable beforeCreate
-                label.label-header
-                  input(type="checkbox" value="created", v-model="newComponent.lifecycleHooks")
-                  span.checkable created
-              div
-                label.label-header
-                  input(type="checkbox" value="beforeMount", v-model="newComponent.lifecycleHooks")
-                  span.checkable beforeMount
-                label.label-header
-                  input(type="checkbox" value="mounted", v-model="newComponent.lifecycleHooks")
-                  span.checkable mounted
-              div
-                label.label-header
-                  input(type="checkbox" value="beforeUpdate", v-model="newComponent.lifecycleHooks")
-                  span.checkable beforeUpdate
-                label.label-header
-                  input(type="checkbox" value="updated", v-model="newComponent.lifecycleHooks")
-                  span.checkable updated
-              div
-                label.label-header
-                  input(type="checkbox" value="beforeDestroy", v-model="newComponent.lifecycleHooks")
-                  span.checkable beforeDestroy
-                label.label-header
-                  input(type="checkbox" value="destroyed", v-model="newComponent.lifecycleHooks")
-                  span.checkable destroyed
+                small
+                  a(href="https://vuejs.org/v2/guide/instance.html#Instance-Lifecycle-Hooks", target="_blank")
+                    img.guide(src="https://vuejs.org/images/logo.png")
+              div.flex.two
+                div(v-for="option in options.lifecycles")
+                  label.label-header
+                    input(type="checkbox" v-bind:value="option", v-model="newComponent.lifecycleHooks")
+                    span.checkable.mini {{option.name}}
 </template>
 
 <script>
 import Beautify from 'js-beautify'
+import converter from './helpers/converter'
 
-// let codemirror
 export default {
   name: 'app',
   mounted () {
-
+    console.log(converter)
   },
   data: function () {
     return {
@@ -139,7 +139,17 @@ export default {
         styles: ['css', 'scss', 'sass', 'stylus'],
         scripts: ['javascript', 'coffeescript'],
         scopedStyle: [true, false],
-        propsType: ['null', 'String', 'Number', 'Boolean', 'Function', 'Object', 'Array']
+        propsType: ['null', 'String', 'Number', 'Boolean', 'Function', 'Object', 'Array'],
+        lifecycles: [
+          { name: 'beforeCreate', order: 0 },
+          { name: 'created', order: 1 },
+          { name: 'beforeMount', order: 2 },
+          { name: 'mounted', order: 3 },
+          { name: 'beforeUpdate', order: 4 },
+          { name: 'updated', order: 5 },
+          { name: 'beforeDestroy', order: 6 },
+          { name: 'destroyed', order: 7 }
+        ]
       },
       newComponent: {
         name: '',
@@ -173,7 +183,7 @@ export default {
   },
   methods: {
     addNewProp () {
-      this.newComponent.props.push({name: '', type: 'String'})
+      this.newComponent.props.push({name: '', type: 'String', required: false})
     },
     removeProp (index) {
       this.newComponent.props.splice(index, 1)
@@ -212,47 +222,30 @@ export default {
       const styleScoped = component.selectedScoped ? ' scoped' : ''
       const scriptLanguage = component.selectedScript === 'javascript' ? '' : ` lang='${component.selectedScript}'`
       let scriptBody = 'export default {'
-      // TODO: Transform "kebab-case"
-      scriptBody += 'name: ' + "'" + component.name + "',"
+      scriptBody += converter.convertToKebabCase(component.name)
       // Props
-      // TODO: Add Validation
       if (component.props && component.props.length > 0) {
-        let scriptProps = component.props.map((prop) => {
-          if (component.selectedPropsValidation) {
-            return `${prop.name}: ${prop.type}`
-          } else {
-            return `'${prop.name}'`
-          }
-        }).join(',')
-        if (component.selectedPropsValidation) {
-          scriptBody += `props: {\n${scriptProps}\n},`
-        } else {
-          scriptBody += `props: [${scriptProps}],`
-        }
+        scriptBody += converter.getProps(component.props, component.selectedPropsValidation)
       }
       // Check Data
       if (component.data && component.data.length > 0) {
-        let scriptData = component.data.map(data => data.name + ": ''").join(',')
-        scriptBody += `data () {return {${scriptData}}},`
+        scriptBody += `data () {return {${converter.getData(component.data)}}},`
       }
       // LifeCycle Hooks
       if (component.lifecycleHooks && component.lifecycleHooks.length > 0) {
-        scriptBody += component.lifecycleHooks.map(hook => `${hook}() {},`).join(' ')
+        scriptBody += converter.getLifecycleHooks(component.lifecycleHooks)
       }
       // Watches
       if (component.watches && component.watches.length > 0) {
-        let scriptWatches = component.watches.map(watch => `${watch.name} (newVal, oldVal){}`).join(',')
-        scriptBody += `watch: { ${scriptWatches} },`
+        scriptBody += `watch: { ${converter.getWatches(component.watches)} },`
       }
       // Computed
       if (component.computed && component.computed.length > 0) {
-        let scriptComputed = component.computed.map(computed => `${computed.name} () {}`).join(',')
-        scriptBody += `computed: { ${scriptComputed} },`
+        scriptBody += `computed: { ${converter.getComputed(component.computed)} },`
       }
       // Methods
       if (component.methods && component.methods.length > 0) {
-        let scriptMethods = component.methods.map(method => `${method.name} () {}`).join(',')
-        scriptBody += `methods: { ${scriptMethods} },`
+        scriptBody += `methods: { ${converter.getMethods(component.methods)} },`
       }
       scriptBody = scriptBody.trim().slice(0, -1)
       scriptBody += '}'
@@ -268,7 +261,6 @@ export default {
         'indent_handlebars': true,
         'object': {}
       })
-      // let dummyText = '<!-- This Component is generated by Vue Component Generator - ChangJoo Park. --> \n'
       let templateBody = isHTML ? '\n\t<div>\n\n\t</div>\n' : '\n\tdiv\n'
       let templateResult = '<template' + templateLanguage + '>' + templateBody + '</template>\n\n'
       let scriptResult = '<script' + scriptLanguage + '>\n' + scriptBody + '\n</scri' + 'pt>\n\n'
@@ -281,6 +273,9 @@ export default {
 </script>
 
 <style>
+html {
+  font-size: 12px;
+}
 .generator {
   padding: 30px;
   padding-top: 10px;
@@ -293,7 +288,7 @@ export default {
 }
 .CodeMirror {
   height: 100vh !important;
-  margin-top: 53px;
+  margin-top: 40px;
   position: fixed;
   left: 0;
   top: 0;
@@ -309,7 +304,14 @@ export default {
   font-size: .75em;
 }
 .label-header.header {
-  padding: .9em;
+  padding: .5em;
   margin: 0;
+}
+.mini {
+  user-select: none;
+  font-size: 14px;
+}
+.guide {
+  width: 15px;
 }
 </style>

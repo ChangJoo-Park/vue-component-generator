@@ -13,6 +13,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "change-case": "^3.0.0",
     "js-beautify": "^1.6.8",
     "vue": "^2.1.0",
     "vue-codemirror": "^2.1.6"
