@@ -2,6 +2,8 @@
 
 > vue.js component generator
 
+See [Demo](https://youtu.be/Y61FvCRh8Qw)
+
 ## Build Setup
 
 ``` bash
