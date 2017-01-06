@@ -8,8 +8,19 @@
       codemirror.container(v-bind:code="compiledComponent", v-bind:options="editorOption")
       div.container
         div
+          div.card.introduce
+            | Vue Component Generator was created for the purpose of describing the vue component. Please refer to the guide because some parts are not included.
+            br
+            | 이 프로젝트는 Vue 컴포넌트에 대한 설명을 위해 만들었습니다. 꼭 필요한 부분만 포함하였으므로 자세한 내용은 가이드를 참조하세요
+            br
+            | - ChangJoo Park
+            br
+            a(href="https://twitter.com/pcjpcj2", target="_blank") twitter
+            a(href="https://github.com/pcjpcj2", target="_blank") github
+            a(href="https://github.com/vuejs-kr", target="_blank") vue.js Korean user organization
           div
-            label.label-header Component Name (enforce kebab-case)
+            label.label-header Component Name
+              small (camelCase -> kebab-case)
             input(type="text", v-model="newComponent.name")
           hr
           div.flex.one
@@ -313,5 +324,8 @@ html {
 }
 .guide {
   width: 15px;
+}
+.introduce {
+  padding: 5px !important;
 }
 </style>

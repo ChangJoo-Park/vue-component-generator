@@ -10,10 +10,12 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "deploy": "node_modules/gh-pages/bin/gh-pages -d dist"
   },
   "dependencies": {
     "change-case": "^3.0.0",
+    "gh-pages": "^0.12.0",
     "js-beautify": "^1.6.8",
     "vue": "^2.1.0",
     "vue-codemirror": "^2.1.6"
