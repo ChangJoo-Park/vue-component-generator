@@ -16,7 +16,9 @@
     "codemirror": "^5.22.0",
     "js-beautify": "^1.6.8",
     "uuid": "^3.0.1",
-    "vue": "^2.1.0"
+    "vue": "^2.1.0",
+    "vue-codemirror": "^2.1.6",
+    "vue-material": "^0.5.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

@@ -1,7 +1,6 @@
 <template lang="pug">
   #app
     div.header
-      v-btn(flat) Hello
     //- Left (Generator)
     div.generator
       div.options
@@ -29,63 +28,68 @@
           div(v-for="(prop, index) in newComponent.props")
             label Props {{prop}}
               input(type="text", placeholder="props" v-model="prop.name")
-              button(v-on:click="removeProp(index)") Remove
+            button(v-on:click="removeProp(index)") Remove
         div.form-group
           button(v-on:click="addNewData") Add Data
           div(v-for="(data, index) in newComponent.data")
             label Data {{data}}
               input(type="text", v-model="data.name")
-              button(v-on:click="removeData(index)") Remove
+            button(v-on:click="removeData(index)") Remove
         div.form-group
           button(v-on:click="addNewWatch") Add Watch
           div(v-for="(watch, index) in newComponent.watches")
             label Watch {{watch}}
               input(type="text", v-model="watch.name")
-              button(v-on:click="removeWatch(index)") Remove
+            button(v-on:click="removeWatch(index)") Remove
         div.form-group
           button(v-on:click="addNewComputed") Add Computed
           div(v-for="(computed, index) in newComponent.computed")
             label Computed {{computed}}
               input(type="text", v-model="computed.name")
-              button(v-on:click="removeComputed(index)") Remove
+            button(v-on:click="removeComputed(index)") Remove
         div.form-group
           button(v-on:click="addNewMethod") Add Method
           div(v-for="(method, index) in newComponent.methods")
             label Method {{method}}
               input(type="text", v-model="method.name")
-              button(v-on:click="removeMethod(index)") Remove
+            button(v-on:click="removeMethod(index)") Remove
         //- LifeCycle Hook
         div.form-group LifeCycle Hooks
-          label
-            input(type="checkbox" value="beforeCreate", v-model="newComponent.lifecycleHooks")
-            | beforeCreate
-          label
-            input(type="checkbox" value="created", v-model="newComponent.lifecycleHooks")
-            | created
-          label
-            input(type="checkbox" value="beforeMount", v-model="newComponent.lifecycleHooks")
-            | beforeMount
-          label
-            input(type="checkbox" value="mounted", v-model="newComponent.lifecycleHooks")
-            | mounted
-          label
-            input(type="checkbox" value="beforeUpdate", v-model="newComponent.lifecycleHooks")
-            | beforeUpdate
-          label
-            input(type="checkbox" value="updated", v-model="newComponent.lifecycleHooks")
-            | updated
-          label
-            input(type="checkbox" value="beforeDestroy", v-model="newComponent.lifecycleHooks")
-            | beforeDestroy
-          label
-            input(type="checkbox" value="destroyed", v-model="newComponent.lifecycleHooks")
-            | destroyed
-        div.form-group
-          button  Reset
-          button()  Confirm
+          ul
+            li
+              label
+                input(type="checkbox" value="beforeCreate", v-model="newComponent.lifecycleHooks")
+                | beforeCreate
+            li
+              label
+                input(type="checkbox" value="created", v-model="newComponent.lifecycleHooks")
+                | created
+            li
+              label
+              input(type="checkbox" value="beforeMount", v-model="newComponent.lifecycleHooks")
+              | beforeMount
+            li
+              label
+                input(type="checkbox" value="mounted", v-model="newComponent.lifecycleHooks")
+                | mounted
+            li
+              label
+                input(type="checkbox" value="beforeUpdate", v-model="newComponent.lifecycleHooks")
+                | beforeUpdate
+            li
+              label
+                input(type="checkbox" value="updated", v-model="newComponent.lifecycleHooks")
+                | updated
+            li
+              label
+                input(type="checkbox" value="beforeDestroy", v-model="newComponent.lifecycleHooks")
+                | beforeDestroy
+            li
+              label
+                input(type="checkbox" value="destroyed", v-model="newComponent.lifecycleHooks")
+                | destroyed
     //- Right (Result)
-    div.result
-      textarea(class="code-mirror")
+    codemirror(v-bind:code="compiledComponent", v-bind:options="editorOption")
 </template>
 
 <script>
@@ -134,14 +138,12 @@
 //   return result
 // }
 import Beautify from 'js-beautify'
-import CodeMirror from 'codemirror'
 
-let codemirror
+// let codemirror
 export default {
   name: 'app',
   mounted () {
-    this.$vuetify.init()
-    console.log(CodeMirror.autoFormatRange)
+
   },
   data: function () {
     return {
@@ -163,6 +165,20 @@ export default {
         selectedStyle: 'css',
         selectedScript: 'javascript',
         selectedScoped: false
+      },
+      editorOption: {
+        tabSize: 2,
+        mode: 'text/javascript',
+        theme: 'cobalt',
+        lineNumbers: true,
+        line: true,
+        keyMap: 'sublime',
+        extraKeys: { 'Ctrl': 'autocomplete' },
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        styleSelectedText: true,
+        highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true },
+        viewportMargin: Infinity
       }
     }
   },
@@ -199,20 +215,23 @@ export default {
     }
   },
   watch: {
-    compiledComponent: {
-      handler (newVal, oldVal) {
-        var dom = document.querySelector('.code-mirror')
-        if (!codemirror) {
-          codemirror = CodeMirror.fromTextArea(dom, {
-            lineNumbers: true,
-            mode: 'javascript'
-          })
-        }
-        const result = Beautify(newVal, { indent_size: 2 })
-        codemirror.setValue(result)
-      },
-      deep: true
-    }
+    // compiledComponent: {
+    //   handler (newVal, oldVal) {
+    //     var dom = document.querySelector('.code-mirror')
+    //     if (!codemirror) {
+    //       codemirror = CodeMirror.fromTextArea(dom, {
+    //         lineNumbers: true,
+    //         mode: 'vue',
+    //         height: '600px',
+    //         styleActiveLine: true,
+    //         matchBrackets: true,
+    //         theme: 'base16-dark'
+    //       })
+    //     }
+    //     codemirror.setValue(newVal)
+    //   },
+    //   deep: true
+    // }
   },
   computed: {
     compiledComponent: function () {
@@ -254,7 +273,18 @@ export default {
       }
       scriptBody = scriptBody.trim().slice(0, -1)
       scriptBody += '}'
-      // scriptBody = Beautify(scriptBody, { indent_size: 2 })
+      scriptBody = Beautify(scriptBody, {
+        'indent_size': 2,
+        'indent_char': ' ',
+        'other': ' ',
+        'indent_level': 0,
+        'indent_with_tabs': false,
+        'preserve_newlines': true,
+        'max_preserve_newlines': 2,
+        'jslint_happy': true,
+        'indent_handlebars': true,
+        'object': {}
+      })
       let templateResult = '<template' + templateLanguage + '>\n\t<div>\n\n\t</div>\n' + '</template>\n\n'
       let scriptResult = '<script' + scriptLanguage + '>\n' + scriptBody + '\n</scri' + 'pt>\n\n'
       let styleResult = '<style' + styleLanguage + styleScoped + '>\n\n' + '</style>'
@@ -266,4 +296,7 @@ export default {
 </script>
 
 <style>
+.CodeMirror {
+  font-family: 'Source Code Pro', 'Monaco','menlo', monospace !important;
+}
 </style>

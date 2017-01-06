@@ -2,14 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import Vuetify from 'vuetify'
+import VueCodeMirror from 'vue-codemirror'
+import VueMaterial from 'vue-material'
 
 // Styles
 import './assets/styles/styles.scss'
-import '../node_modules/codemirror/lib/codemirror.css'
 
-Vue.use(Vuetify)
-
+console.log()
+Vue.use(VueCodeMirror)
+Vue.use(VueMaterial)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
