@@ -8,16 +8,6 @@
       codemirror.container(v-bind:code="compiledComponent", v-bind:options="editorOption")
       div.container
         div
-          div.card.introduce
-            | Vue Component Generator was created for the purpose of describing the vue component. Please refer to the guide because some parts are not included.
-            br
-            | 이 프로젝트는 Vue 컴포넌트에 대한 설명을 위해 만들었습니다. 꼭 필요한 부분만 포함하였으므로 자세한 내용은 가이드를 참조하세요
-            br
-            | - ChangJoo Park
-            br
-            a(href="https://twitter.com/pcjpcj2", target="_blank") twitter
-            a(href="https://github.com/pcjpcj2", target="_blank") github
-            a(href="https://github.com/vuejs-kr", target="_blank") vue.js Korean user organization
           div
             label.label-header Component Name
               small (camelCase -> kebab-case)
@@ -132,6 +122,21 @@
                   label.label-header
                     input(type="checkbox" v-bind:value="option", v-model="newComponent.lifecycleHooks")
                     span.checkable.mini {{option.name}}
+
+    div.introduce
+      div.introduction(v-bind:class="{ 'intro-active': showIntro }")
+        h2(v-on:click="showIntro = !showIntro") About vue-component-generator
+          span(class="hide-intro", v-if="showIntro") Close
+        div(v-if="showIntro")
+          | Vue Component Generator was created for the purpose of describing the vue component. Please refer to the guide because some parts are not included.
+          br
+          | 이 프로젝트는 Vue 컴포넌트에 대한 설명을 위해 만들었습니다. 꼭 필요한 부분만 포함하였으므로 자세한 내용은 가이드를 참조하세요
+          br
+          | - ChangJoo Park
+          br
+          a(href="https://twitter.com/pcjpcj2", target="_blank") twitter
+          a(href="https://github.com/pcjpcj2", target="_blank") github
+          a(href="https://github.com/vuejs-kr", target="_blank") vue.js Korean user organization
 </template>
 
 <script>
@@ -145,6 +150,7 @@ export default {
   },
   data: function () {
     return {
+      showIntro: false,
       options: {
         template: ['html', 'pug'],
         styles: ['css', 'scss', 'sass', 'stylus'],
@@ -326,6 +332,32 @@ html {
   width: 15px;
 }
 .introduce {
-  padding: 5px !important;
+  padding: 5px;
+  border-top: 1px;
+  position: relative;
+  height: 40px;
+  clear: both;
+  display: block;
+  background: #fff;
+}
+.introduction {
+  width: 50%;
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  bottom: 0;
+  background: #fff;
+  padding: .6em;
+}
+.introduction.intro-active {
+  box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.2);
+}
+.introduction h2 {
+  font-size: 1em;
+  cursor: pointer;
+}
+
+span.hide-intro {
+  float: right;
 }
 </style>
