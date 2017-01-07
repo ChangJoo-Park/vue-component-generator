@@ -134,9 +134,13 @@
           br
           | - ChangJoo Park
           br
-          a(href="https://twitter.com/pcjpcj2", target="_blank") twitter
-          a(href="https://github.com/pcjpcj2", target="_blank") github
-          a(href="https://github.com/vuejs-kr", target="_blank") vue.js Korean user organization
+          ul
+            li
+              a(href="https://twitter.com/pcjpcj2", target="_blank") twitter &nbsp;
+            li
+              a(href="https://github.com/pcjpcj2", target="_blank") github &nbsp;
+            li
+              a(href="https://github.com/vuejs-kr", target="_blank") vue.js Korean user organization
 </template>
 
 <script>
