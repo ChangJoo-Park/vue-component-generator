@@ -49,17 +49,16 @@ function getProps (props) {
 
   let result = availableProps.map((prop) => {
     if (prop.validation) {
+      const name = prop.name.includes('-') ? `'${prop.name}'` : prop.name
       if (prop.required) {
-        return `${prop.name}: {type: ${prop.type},\n required: ${prop.required}\n},`
+        return `${name}: {type: ${prop.type},\n required: ${prop.required}\n},`
       } else {
-        return `${prop.name}: ${prop.type},`
+        return `${name}: ${prop.type},`
       }
     } else {
       if (hasValidation) {
         return `${prop.name}: null,`
       }
-      console.log('no')
-      console.log(`'${prop.name}'`)
       return `'${prop.name}',`
     }
   }).join('')
