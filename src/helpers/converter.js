@@ -33,25 +33,43 @@ function getComputed (computed) {
   return availableComputed.map(c => `${c.name} () {}`).join(',')
 }
 
-function getProps (props, selectedPropsValidation) {
+function getProps (props) {
   const availableProps = props.filter((prop) => {
     return prop.name.trim() !== ''
   })
+  // TODO: Add has props
+  let hasValidation = false
+  for (var i = 0; i < availableProps.length; i++) {
+    if (availableProps[i].validation) {
+      hasValidation = true
+      break
+    }
+  }
+  console.log(hasValidation)
+
   let result = availableProps.map((prop) => {
-    if (selectedPropsValidation) {
+    if (prop.validation) {
       if (prop.required) {
         return `${prop.name}: {type: ${prop.type},\n required: ${prop.required}\n},`
       } else {
         return `${prop.name}: ${prop.type},`
       }
     } else {
+      if (hasValidation) {
+        return `${prop.name}: null,`
+      }
+      console.log('no')
+      console.log(`'${prop.name}'`)
       return `'${prop.name}',`
     }
-  }).join('').slice(0, -1)
+  }).join('')
 
-  if (selectedPropsValidation) {
+  if (hasValidation) {
+    // REMOVE
+    result = result.replace(/,\s*$/, '')
     return `props: {\n${result}\n},`
   } else {
+    result = result.slice(0, -1)
     return `props: [${result}],`
   }
 }

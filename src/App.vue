@@ -4,9 +4,9 @@
       a.brand Vue Component Generator
       div.menu
         a.button.icon-puzzle(href="https://github.com/ChangJoo-Park/vue-component-generator", target="_blank") Github Repo
-    div.flex.two
-      codemirror.container(v-bind:code="compiledComponent", v-bind:options="editorOption")
-      div.container
+    div.flex.three
+      codemirror.code-container(v-bind:code="compiledComponent", v-bind:options="editorOption")
+      div.container.two-third
         div
           div
             label.label-header Component Name
@@ -37,33 +37,23 @@
                   small
                     a(href="https://vuejs.org/v2/guide/components.html#Prop-Validation", target="_blank")
                       img.guide(src="https://vuejs.org/images/logo.png")
-                label.label-header.header
-                  input(type="checkbox" value="selectedPropsValidation", v-model="newComponent.selectedPropsValidation")
-                  span.checkable.mini Validation
               button(v-on:click="addNewProp") Add
-              div(v-if="newComponent.selectedPropsValidation")
-                div(v-for="(prop, index) in newComponent.props")
-                  div.flex.two
-                    div
-                      label.label-header Name
-                        input(type="text", v-model="prop.name")
-                    div
-                      label.label-header Type
-                        select(v-model="prop.type")
-                          option(v-for="option in options.propsType" v-bind:value="option") {{option}}
-                  div.flex.two
-                    div
-                      label.label-header
-                        input(type="checkbox" value="prop.required", v-model="prop.required")
-                        span.checkable Required
-                    div.remove-button-wrapper
-                      button.error.button(v-on:click="removeProp(index)") Remove
-              div(v-else)
-                div(v-for="(prop, index) in newComponent.props")
+              div(v-for="(prop, index) in newComponent.props")
+                div.flex(v-bind:class="{ 'two': prop.validation }")
                   label.label-header Name
                     input(type="text", v-model="prop.name")
-                  div.remove-button-wrapper
-                    button.error.button(v-on:click="removeProp(index)") Remove
+                  label.label-header(v-if="prop.validation") Type
+                    select(v-model="prop.type")
+                      option(v-for="option in options.propsType" v-bind:value="option") {{option}}
+                div.flex.two
+                  label.label-header
+                    input(type="checkbox" value="prop.validation", v-model="prop.validation")
+                    span.checkable Validation
+                  label.label-header(v-if="prop.validation")
+                    input(type="checkbox" value="prop.required", v-model="prop.required")
+                    span.checkable Required
+                div.remove-button-wrapper
+                  button.error.button(v-on:click="removeProp(index)") Remove
             div
               h2 Data
                 small
@@ -123,24 +113,24 @@
                     input(type="checkbox" v-bind:value="option", v-model="newComponent.lifecycleHooks")
                     span.checkable.mini {{option.name}}
 
-    div.introduce
-      div.introduction(v-bind:class="{ 'intro-active': showIntro }")
-        h2(v-on:click="showIntro = !showIntro") About vue-component-generator
-          span(class="hide-intro", v-if="showIntro") Close
-        div(v-if="showIntro")
-          | Vue Component Generator was created for the purpose of describing the vue component. Please refer to the guide because some parts are not included.
-          br
-          | 이 프로젝트는 Vue 컴포넌트에 대한 설명을 위해 만들었습니다. 꼭 필요한 부분만 포함하였으므로 자세한 내용은 가이드를 참조하세요
-          br
-          | - ChangJoo Park
-          br
-          ul
-            li
-              a(href="https://twitter.com/pcjpcj2", target="_blank") twitter &nbsp;
-            li
-              a(href="https://github.com/pcjpcj2", target="_blank") github &nbsp;
-            li
-              a(href="https://github.com/vuejs-kr", target="_blank") vue.js Korean user organization
+      div.introduce
+        div.introduction(v-bind:class="{ 'intro-active': showIntro }")
+          h2(v-on:click="showIntro = !showIntro") About vue-component-generator
+            span(class="hide-intro", v-if="showIntro") Close
+          div(v-if="showIntro")
+            | Vue Component Generator was created for the purpose of describing the vue component. Please refer to the guide because some parts are not included.
+            br
+            | 이 프로젝트는 Vue 컴포넌트에 대한 설명을 위해 만들었습니다. 꼭 필요한 부분만 포함하였으므로 자세한 내용은 가이드를 참조하세요
+            br
+            | - ChangJoo Park
+            br
+            ul
+              li
+                a(href="https://twitter.com/pcjpcj2", target="_blank") twitter &nbsp;
+              li
+                a(href="https://github.com/pcjpcj2", target="_blank") github &nbsp;
+              li
+                a(href="https://github.com/vuejs-kr", target="_blank") vue.js Korean user organization
 </template>
 
 <script>
@@ -183,7 +173,6 @@ export default {
         selectedTemplate: 'html',
         selectedStyle: 'css',
         selectedScript: 'javascript',
-        selectedPropsValidation: false,
         selectedScoped: false
       },
       editorOption: {
@@ -204,7 +193,7 @@ export default {
   },
   methods: {
     addNewProp () {
-      this.newComponent.props.push({name: '', type: 'String', required: false})
+      this.newComponent.props.push({name: '', validation: false, type: 'String', required: false})
     },
     removeProp (index) {
       this.newComponent.props.splice(index, 1)
@@ -246,7 +235,7 @@ export default {
       scriptBody += converter.convertToKebabCase(component.name)
       // Props
       if (component.props && component.props.length > 0) {
-        scriptBody += converter.getProps(component.props, component.selectedPropsValidation)
+        scriptBody += converter.getProps(component.props)
       }
       // Check Data
       if (component.data && component.data.length > 0) {
@@ -303,12 +292,13 @@ html {
 }
 .container {
   font-family: 'Source Code Pro', 'Monaco','menlo', monospace !important;
-  width: 49% !important;
   height: 100% !important;
   margin-top: 55px;
 }
+.code-container {
+}
 .CodeMirror {
-  height: 100vh !important;
+  height: 90vh !important;
   margin-top: 40px;
   position: fixed;
   left: 0;
@@ -345,7 +335,7 @@ html {
   background: #fff;
 }
 .introduction {
-  width: 50%;
+  width: 100%;
   position: absolute;
   left: 25%;
   right: 25%;
