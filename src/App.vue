@@ -147,7 +147,7 @@ export default {
       showIntro: false,
       options: {
         template: ['html', 'pug'],
-        styles: ['css', 'scss', 'sass', 'stylus'],
+        styles: ['css', 'scss', 'sass', 'stylus', 'less'],
         scripts: ['javascript', 'coffeescript'],
         scopedStyle: [true, false],
         propsType: ['null', 'String', 'Number', 'Boolean', 'Function', 'Object', 'Array'],
