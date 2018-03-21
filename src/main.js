@@ -9,7 +9,7 @@ import 'codemirror/keymap/sublime'
 import './assets/vendors/picnic.css'
 import './assets/vendors/picnic-plugins.css'
 import './assets/styles/styles.scss'
-console.log()
+
 Vue.use(VueCodeMirror)
 Vue.directive('focus', {
   // When the bound element is inserted into the DOM...

@@ -11,7 +11,7 @@
           div
             label.label-header Component Name
               small (camelCase -> kebab-case)
-            input(type="text", v-model="newComponent.name")
+            input(type="text", v-model="newComponent.name", "v-focus")
           hr
           div.flex.one
             div
