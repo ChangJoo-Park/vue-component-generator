@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import VueCodeMirror from 'vue-codemirror'
+import 'codemirror/keymap/sublime'
 
 // Styles
 import './assets/vendors/picnic.css'
